@@ -8,7 +8,8 @@
     "bower": "^1.4.1",
     "grunt": "*",
     "grunt-contrib-connect": "*",
-    "grunt-contrib-watch": "*"
+    "grunt-contrib-watch": "*",
+    "inquirer": "^0.8.2"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
