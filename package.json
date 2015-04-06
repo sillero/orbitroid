@@ -1,0 +1,26 @@
+{
+  "name": "threejs-arcade",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "dependencies": {},
+  "devDependencies": {
+    "bower": "^1.4.1",
+    "grunt": "*",
+    "grunt-contrib-connect": "*",
+    "grunt-contrib-watch": "*"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/sillero/threejs-arcade.git"
+  },
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/sillero/threejs-arcade/issues"
+  },
+  "homepage": "https://github.com/sillero/threejs-arcade"
+}
