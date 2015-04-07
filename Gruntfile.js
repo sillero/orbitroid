@@ -34,7 +34,7 @@ module.exports = function(grunt) {
   };
 
   bower.commands
-    .install(['fetch', 'three.js'], {}, bowerOptions)
+    .install(['fetch', 'three.js', 'dat-gui'], {}, bowerOptions)
     .on('log', function(log){
       grunt.log.ok('bower:', log.message);
     })
