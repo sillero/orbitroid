@@ -8,7 +8,6 @@ module.exports = (function(){
     game.scene = null;
     game.camera = null;
     game.renderer = null;
-    // game.squareMesh = null;
     game.ship = null;
     game.canvasWidth = null; //window.innerWidth;
     game.canvasHeight = null; //window.innerHeight;
@@ -16,17 +15,7 @@ module.exports = (function(){
     game.worldUnit = 20; // height in units
     game.limitLeft = null;//- (worldUnit * aspectRatio) / 2;
     game.limitRight = null; //(worldUnit * aspectRatio) / 2;
-    // game.direction = -1;
     game.stepX = 0.2;
-    // game.orbit = {
-    //   direction: 1,
-    //   center: { x: 0, y: 0 },
-    //   radius: 4,
-    //   degreesPer60Frames: 5,
-    //   angleSpeed: function(){ return this.degreesPer60Frames * Math.PI / 180; }, // radians / second
-    //   registeredRadian: 0,
-    //   registeredDegree: 0
-    // };
   };
 
   Game.prototype.init = function(){
@@ -68,21 +57,23 @@ module.exports = (function(){
     var game = this;
 
     window.addEventListener('resize', function(){
+      window.cancelAnimationFrame(game.animFrameID);
+
       game.recalculateDimensions();
       game.recalculateCamera();
-
-      window.cancelAnimationFrame(game.animFrameID);
       game.renderScene();
     });
   };
 
   Game.prototype.initializeScene = function(){
     var game = this;
-    // if(Detector.webgl){
+
+    if (window.WebGLRenderingContext) {
       game.renderer = new THREE.WebGLRenderer({antialias:true});
-    // } else {
-    //   renderer = new THREE.CanvasRenderer();
-    // }
+    }
+    else {
+      renderer = new THREE.CanvasRenderer();
+    }
 
     game.renderer.setClearColor(0xFFFFFF, 1);
 

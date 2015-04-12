@@ -7,14 +7,14 @@
   ///--------------------------
   ///--------------------------
 
-  var pyramid = new Game();
+  var redmatter = new Game();
   var gui = new dat.GUI();
 
-  gui.add(pyramid, 'stepX', 0.01, 1);
-  gui.add(pyramid.ship.options.orbit, 'degreesPer60Frames', 1, 180);
-  gui.add(pyramid.ship.options.orbit, 'registeredDegree').listen();
+  redmatter.init();
+  window.redmatter = redmatter;
 
-  pyramid.init();
-
-  window.pyramid = pyramid;
+  gui.add(redmatter, 'stepX', 0.01, 1);
+  gui.add(redmatter.ship.options.orbit, 'direction');
+  gui.add(redmatter.ship.options.orbit, 'degreesPer60Frames', 1, 180);
+  gui.add(redmatter.ship.options.orbit, 'registeredDegree').listen();
 })();
