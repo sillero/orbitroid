@@ -3,28 +3,41 @@ var inquirer = require('inquirer');
 
 module.exports = function(grunt) {
   grunt.initConfig({
-  connect: {
-    server: {
-    options: {
-      livereload: true
+    webpack: {
+      game: {
+        entry: './js/main.js',
+        output: {
+          path: './js',
+          filename: 'main.build.js'
+        }
+      }
+    },
+    connect: {
+      server: {
+      options: {
+        livereload: true
+      }
+      }
+    },
+    watch: {
+      livereload: {
+        files: ['index.html', './js/main.build.js'],
+        options: {
+          livereload: true
+        }
+      },
+      main: {
+        files: ['./js/main.js', './js/game.js', './js/game.ship.js'],
+        tasks: ['webpack']
+      }
     }
-    }
-  },
-  watch: {
-    livereload: {
-    files: '**/*',
-    tasks: [],
-    options: {
-      livereload: true
-    }
-    }
-  }
   });
 
   grunt.loadNpmTasks('grunt-contrib-connect');
   grunt.loadNpmTasks('grunt-contrib-watch');
+  grunt.loadNpmTasks('grunt-webpack');
 
-  grunt.registerTask('default', ['bower', 'connect', 'watch']);
+  grunt.registerTask('default', ['bower', 'webpack', 'connect', 'watch']);
 
   grunt.registerTask('bower', function(){
   var done = this.async();

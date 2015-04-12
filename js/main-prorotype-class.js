@@ -42,7 +42,7 @@
 
   Game.prototype.recalculateCamera = function(){
     var self = this;
-    
+
     self.camera.left = - (self.worldUnit * self.aspectRatio) / 2;
     self.camera.right = (self.worldUnit * self.aspectRatio) / 2;
     self.camera.top = self.worldUnit / 2;
