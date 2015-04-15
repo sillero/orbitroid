@@ -44,35 +44,53 @@ module.exports = (function(){
   Ship.prototype.flipOrbit = function(){
     var ship = this;
     var orbit = ship.options.orbit;
-    var deltaRadian = (function(){
-      var quarterRadian = Math.PI/2;
-      var quarters = Math.round(orbit.registeredRadian / quarterRadian);
-      var deltaRadian = orbit.registeredRadian - quarters * quarterRadian;
+    var newCenter = { x: 0, y: 0 };
+    var quarterRadian = Math.PI/2;
+    var quadrant = Math.ceil(orbit.registeredRadian / quarterRadian);
+    var deltaRadian, newRadian;
+    var setNewOrbit = function(deltaRadian, newRadian, quadModifiers){
+      console.log('deltaRadian', deltaRadian);
+      console.log('newRadian', deltaRadian);
+      console.log('quadModifiers.x', quadModifiers.x);
+      console.log('quadModifiers.y', quadModifiers.y);
+      console.log('');
 
-      // if (quarters == 1 || quarters == 2) {
-      //   deltaRadian = quarterRadian - deltaRadian;
-      // }
+      orbit.center.x = ship.mesh.position.x + (quadModifiers.x * orbit.radius * Math.cos(deltaRadian));
+      orbit.center.y = ship.mesh.position.y + (quadModifiers.y * orbit.radius * Math.sin(deltaRadian));
+      orbit.direction *= -1;
+      orbit.registeredRadian = newRadian;
 
-      return deltaRadian;
-    })();
-    var newCenter = {
-      x: ship.mesh.position.x - (orbit.radius * Math.cos(deltaRadian)),
-      y: ship.mesh.position.y - (orbit.radius * Math.sin(deltaRadian))
+      repositionShip(newRadian);
     };
-
-    orbit.direction *= -1;
-    // orbit.registeredRadian *= -1;
-    orbit.center.x = newCenter.x;
-    orbit.center.y = newCenter.y;
-
-
-    orbit.registeredRadian = deltaRadian;
-    // var cos = Math.cos(deltaAngle);
-    // var sin = Math.sin(deltaAngle);
-    // var newX = orbit.center.x + (orbit.radius * cos);
-    // var newY = orbit.center.y + (orbit.radius * sin);
-    //
-    // ship.mesh.position.set(newX, newY, 0);
+    var repositionShip = function(newRadian){
+      var newX = orbit.center.x + (orbit.radius * Math.cos(newRadian));
+      var newY = orbit.center.y + (orbit.radius * Math.sin(newRadian));
+      
+      ship.mesh.position.set(newX, newY, 0);
+    }
+    
+    if (quadrant == 1) {
+      deltaRadian = orbit.registeredRadian;
+      newRadian = Math.PI + deltaRadian;
+      quadModifiers = { x: 1, y: 1 };
+    }
+    if (quadrant == 2) {
+      deltaRadian = Math.PI - orbit.registeredRadian;
+      newRadian = Math.PI + orbit.registeredRadian;
+      quadModifiers = { x: -1, y: 1 };
+    }
+    if (quadrant == 3) {
+      deltaRadian = orbit.registeredRadian - Math.PI;
+      newRadian = deltaRadian;
+      quadModifiers = { x: -1, y: -1 };
+    }
+    if (quadrant == 4) {
+      deltaRadian = Math.PI * 2 - orbit.registeredRadian;
+      newRadian = Math.PI - deltaRadian;
+      quadModifiers = { x: 1, y: -1 };
+    }
+    if (!deltaRadian || !newRadian) { debugger; }
+    setNewOrbit(deltaRadian, newRadian, quadModifiers);
   };
 
   Ship.prototype.movement = {};
