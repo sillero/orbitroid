@@ -46,12 +46,14 @@ module.exports = (function(){
     var orbit = ship.options.orbit;
     var deltaRadian = (function(){
       var quarterRadian = Math.PI/2;
-      var quarters = orbit.registeredRadian / quarterRadian;
-      //finish this
+      var quarters = Math.round(orbit.registeredRadian / quarterRadian);
+      var deltaRadian = orbit.registeredRadian - quarters * quarterRadian;
 
+      // if (quarters == 1 || quarters == 2) {
+      //   deltaRadian = quarterRadian - deltaRadian;
+      // }
 
-      if (orbit.registeredRadian > )
-      Math.PI - orbit.registeredRadian;
+      return deltaRadian;
     })();
     var newCenter = {
       x: ship.mesh.position.x - (orbit.radius * Math.cos(deltaRadian)),
