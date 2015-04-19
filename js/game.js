@@ -63,6 +63,14 @@ module.exports = (function(){
       game.recalculateCamera();
       game.renderScene();
     });
+    window.addEventListener('keydown', function(e){
+      if (e.which === 37) {
+        game.ship.flipOrbit(1);
+      }
+      if (e.which === 39) {
+        game.ship.flipOrbit(-1);
+      }
+    });
   };
 
   Game.prototype.initializeScene = function(){
