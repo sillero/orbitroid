@@ -430,6 +430,14 @@
 
 	    var ship = this;
 	    var orbit = ship.options.orbit;
+
+	    if (orbit.registeredRadian > 2 * Math.PI) {
+	      orbit.registeredRadian -= 2 * Math.PI;
+	    }
+	    if (orbit.registeredRadian < 0) {
+	      orbit.registeredRadian = 2 * Math.PI - orbit.registeredRadian;
+	    }
+
 	    var newCenter = { x: 0, y: 0 };
 	    var quarterRadian = Math.PI/2;
 	    var quadrant = Math.ceil(orbit.registeredRadian / quarterRadian);
@@ -462,7 +470,7 @@
 	      quadModifiers = { x: 1, y: -1 };
 	    }
 	    if (!deltaRadian || !newRadian) {
-	      console.error('Critical error!');
+	      throw new Error('Critical error on quadrant calculation!');
 	      debugger;
 	    }
 	    setNewOrbit(deltaRadian, newRadian, quadModifiers);
@@ -477,6 +485,7 @@
 
 	    // rotation over time
 	    orbit.registeredRadian += frameRadian * orbit.direction;
+	    orbit.registeredDegree = orbit.registeredRadian * 180 / Math.PI;
 
 	    if (orbit.registeredRadian > 2 * Math.PI) {
 	      orbit.registeredRadian -= 2 * Math.PI;
