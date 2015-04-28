@@ -10,7 +10,10 @@
   var orbitroide = new Game();
   // var gui = new dat.GUI();
 
-  orbitroide.init();
+  orbitroide
+    .init()
+    .instructions();
+
   window.orbitroide = orbitroide;
 
   // gui.add(orbitroide, 'stepX', 0.01, 1);

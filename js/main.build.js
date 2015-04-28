@@ -56,7 +56,10 @@
 	  var orbitroide = new Game();
 	  // var gui = new dat.GUI();
 
-	  orbitroide.init();
+	  orbitroide
+	    .init()
+	    .instructions();
+
 	  window.orbitroide = orbitroide;
 
 	  // gui.add(orbitroide, 'stepX', 0.01, 1);
@@ -104,7 +107,7 @@
 	    var game = this;
 
 	    window.cancelAnimationFrame(game.animFrameID);
-	    
+
 	    document.getElementById("WebGLCanvas").innerHTML = '';
 
 	    game.reset();
@@ -119,6 +122,12 @@
 	    game.createObstacles();
 	    game.renderScene();
 	    game.bindDOM();
+
+	    return game;
+	  };
+
+	  Game.prototype.instructions = function(){
+	    alert('Para se movimentar, utilize as setas direita e esquerda.\n\nREGRAS: não saia dos limites da tela, não bata em nenhum obstáculo, o objetivo está em verde.');
 	  };
 
 	  Game.prototype.recalculateDimensions = function(){
@@ -296,6 +305,16 @@
 
 	    game.renderer.render(game.scene, game.camera);
 
+	    if (
+	      game.ship.mesh.position.x > game.camera.right ||
+	      game.ship.mesh.position.x < game.camera.left ||
+	      game.ship.mesh.position.y > game.camera.top ||
+	      game.ship.mesh.position.y < game.camera.bottom
+	    ) {
+	      alert('GAME OVER!');
+	      game.restart();
+	    }
+
 	    game.obstacles.forEach(function(obstacle){
 	      if (game.ship.didCollide(obstacle)) {
 	        if (obstacle.isGoal) {
@@ -347,8 +366,8 @@
 	      registeredDegree: 0
 	    };
 
-	    var blackMaterial = new THREE.MeshBasicMaterial({
-	      color: 0x000000,
+	    var shipMaterial = new THREE.MeshBasicMaterial({
+	      color: 0xff0000,
 	      side: THREE.DoubleSide
 	    });
 
@@ -359,7 +378,7 @@
 	    ship.geometry.vertices.push(new THREE.Vector3(halfSize, -halfSize));
 	    ship.geometry.faces.push(new THREE.Face3(0, 1, 2));
 
-	    ship.mesh = new THREE.Mesh(ship.geometry, blackMaterial);
+	    ship.mesh = new THREE.Mesh(ship.geometry, shipMaterial);
 	    ship.mesh.position.set(-options.orbit.radius, 0, 0);
 	  };
 
@@ -367,13 +386,13 @@
 	    var ship = this;
 	    var getBoundingVertices = function(entity){
 	      var halfSize = entity.size / 2;
-	      
+
 	      return {
 	        V1: {
 	          x: entity.mesh.position.x - halfSize,
 	          y: entity.mesh.position.y + halfSize
 	        },
-	        V3: { 
+	        V3: {
 	          x: entity.mesh.position.x + halfSize,
 	          y: entity.mesh.position.y - halfSize
 	        }
@@ -381,7 +400,7 @@
 	    };
 	    var A = getBoundingVertices(ship);
 	    var B = getBoundingVertices(obstacle);
-	    
+
 	    if (B.V1.y < A.V3.y) { return false; }
 
 	    if (B.V3.y > A.V1.y) { return false; }

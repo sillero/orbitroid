@@ -19,8 +19,8 @@ module.exports = (function(){
       registeredDegree: 0
     };
 
-    var blackMaterial = new THREE.MeshBasicMaterial({
-      color: 0x000000,
+    var shipMaterial = new THREE.MeshBasicMaterial({
+      color: 0xff0000,
       side: THREE.DoubleSide
     });
 
@@ -31,7 +31,7 @@ module.exports = (function(){
     ship.geometry.vertices.push(new THREE.Vector3(halfSize, -halfSize));
     ship.geometry.faces.push(new THREE.Face3(0, 1, 2));
 
-    ship.mesh = new THREE.Mesh(ship.geometry, blackMaterial);
+    ship.mesh = new THREE.Mesh(ship.geometry, shipMaterial);
     ship.mesh.position.set(-options.orbit.radius, 0, 0);
   };
 
@@ -39,13 +39,13 @@ module.exports = (function(){
     var ship = this;
     var getBoundingVertices = function(entity){
       var halfSize = entity.size / 2;
-      
+
       return {
         V1: {
           x: entity.mesh.position.x - halfSize,
           y: entity.mesh.position.y + halfSize
         },
-        V3: { 
+        V3: {
           x: entity.mesh.position.x + halfSize,
           y: entity.mesh.position.y - halfSize
         }
@@ -53,7 +53,7 @@ module.exports = (function(){
     };
     var A = getBoundingVertices(ship);
     var B = getBoundingVertices(obstacle);
-    
+
     if (B.V1.y < A.V3.y) { return false; }
 
     if (B.V3.y > A.V1.y) { return false; }

@@ -30,7 +30,7 @@ module.exports = (function(){
     var game = this;
 
     window.cancelAnimationFrame(game.animFrameID);
-    
+
     document.getElementById("WebGLCanvas").innerHTML = '';
 
     game.reset();
@@ -45,6 +45,12 @@ module.exports = (function(){
     game.createObstacles();
     game.renderScene();
     game.bindDOM();
+
+    return game;
+  };
+
+  Game.prototype.instructions = function(){
+    alert('Para se movimentar, utilize as setas direita e esquerda.\n\nREGRAS: não saia dos limites da tela, não bata em nenhum obstáculo, o objetivo está em verde.');
   };
 
   Game.prototype.recalculateDimensions = function(){
@@ -221,6 +227,16 @@ module.exports = (function(){
     game.moveShip();
 
     game.renderer.render(game.scene, game.camera);
+
+    if (
+      game.ship.mesh.position.x > game.camera.right ||
+      game.ship.mesh.position.x < game.camera.left ||
+      game.ship.mesh.position.y > game.camera.top ||
+      game.ship.mesh.position.y < game.camera.bottom
+    ) {
+      alert('GAME OVER!');
+      game.restart();
+    }
 
     game.obstacles.forEach(function(obstacle){
       if (game.ship.didCollide(obstacle)) {
