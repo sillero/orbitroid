@@ -157,6 +157,16 @@
 	    game.camera.lookAt(game.scene.position);
 	  };
 
+	  Game.prototype.printObstacles = function(){
+	    var str = [];
+
+	    game.obstacles.forEach(function(obstacle){
+	      str.push('game.obstacles.push(new Obstacle({ goal: ' + obstacle.isGoal + 'size: ' + obstacle.size + ', position: ['+obstacle.mesh.position.x+', '+obstacle.mesh.position.y+'] }));');
+	    });
+
+	    console.log(str.join('\n'));
+	  };
+
 	  Game.prototype.bindDOM = function(){
 	    var game = this;
 
@@ -179,20 +189,21 @@
 	      }
 	    });
 
-	    // window.addEventListener('click', function(e){
-	    //   console.log(e);
-	    //   var unitPerPixel = game.worldUnit / game.canvasHeight;
-	    //   var x = e.pageX - (game.canvasWidth / 2);
-	    //   var y = (game.canvasHeight - e.pageY) - (game.canvasHeight / 2);
-	    //   var size = Math.random() * (1.5 - 0.25) + 0.25
-	    //
-	    //   x *= unitPerPixel;
-	    //   y *= unitPerPixel;
-	    //
-	    //   var obstacle = new Obstacle({ size: size, position: [x, y] });
-	    //   game.obstacles.push(obstacle);
-	    //   game.scene.add(obstacle.mesh);
-	    // });
+	    window.addEventListener('click', function(e){
+	      if (window.location.hash != '#edit') return;
+
+	      var unitPerPixel = game.worldUnit / game.canvasHeight;
+	      var x = e.pageX - (game.canvasWidth / 2);
+	      var y = (game.canvasHeight - e.pageY) - (game.canvasHeight / 2);
+	      var size = Math.random() * (1.5 - 0.25) + 0.25
+
+	      x *= unitPerPixel;
+	      y *= unitPerPixel;
+
+	      var obstacle = new Obstacle({ goal: e.altKey, size: size, position: [x, y] });
+	      game.obstacles.push(obstacle);
+	      game.scene.add(obstacle.mesh);
+	    });
 	  };
 
 	  Game.prototype.initializeScene = function(){
