@@ -7,7 +7,7 @@
   ///--------------------------
   ///--------------------------
 
-  var orbitroide = new Game();
+  var orbitroide = new Game(document.getElementById('WebGLCanvas'));
   // var gui = new dat.GUI();
 
   orbitroide

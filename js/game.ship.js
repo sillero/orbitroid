@@ -112,7 +112,10 @@ module.exports = (function(){
       newRadian = Math.PI - deltaRadian;
       quadModifiers = { x: 1, y: -1 };
     }
-    if (!deltaRadian || !newRadian) { debugger; }
+    if (!deltaRadian || !newRadian) {
+      console.error('Critical error!');
+      debugger;
+    }
     setNewOrbit(deltaRadian, newRadian, quadModifiers);
   };
 

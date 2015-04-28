@@ -1,9 +1,10 @@
 module.exports = (function(){
   var Ship = require('./game.ship');
   var Obstacle = require('./game.obstacle');
-  var Game = function(){
+  var Game = function($el){
     var game = this;
 
+    game.$el = $el;
     game.reset();
   };
 
@@ -31,7 +32,7 @@ module.exports = (function(){
 
     window.cancelAnimationFrame(game.animFrameID);
 
-    document.getElementById("WebGLCanvas").innerHTML = '';
+    game.$el.innerHTML = '';
 
     game.reset();
     game.init();
@@ -55,9 +56,10 @@ module.exports = (function(){
 
   Game.prototype.recalculateDimensions = function(){
     var game = this;
+    var canvasRect = game.$el.getBoundingClientRect();
 
-    game.canvasWidth = window.innerWidth;
-    game.canvasHeight = window.innerHeight;
+    game.canvasWidth = canvasRect.width;
+    game.canvasHeight = canvasRect.height;
     game.aspectRatio = game.canvasWidth / game.canvasHeight;
     game.limitLeft = - (game.worldUnit * game.aspectRatio) / 2;
     game.limitRight = (game.worldUnit * game.aspectRatio) / 2;
@@ -81,13 +83,13 @@ module.exports = (function(){
   Game.prototype.bindDOM = function(){
     var game = this;
 
-    window.addEventListener('resize', function(){
-      window.cancelAnimationFrame(game.animFrameID);
-
-      game.recalculateDimensions();
-      game.recalculateCamera();
-      game.renderScene();
-    });
+    // window.addEventListener('resize', function(){
+    //   window.cancelAnimationFrame(game.animFrameID);
+    //
+    //   game.recalculateDimensions();
+    //   game.recalculateCamera();
+    //   game.renderScene();
+    // });
 
     window.addEventListener('keydown', function(e){
       if (e.which === 37) {
@@ -130,7 +132,7 @@ module.exports = (function(){
 
     game.recalculateDimensions();
 
-    document.getElementById("WebGLCanvas").appendChild(game.renderer.domElement);
+    game.$el.appendChild(game.renderer.domElement);
 
     game.scene = new THREE.Scene();
 

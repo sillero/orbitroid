@@ -53,7 +53,7 @@
 	  ///--------------------------
 	  ///--------------------------
 
-	  var orbitroide = new Game();
+	  var orbitroide = new Game(document.getElementById('WebGLCanvas'));
 	  // var gui = new dat.GUI();
 
 	  orbitroide
@@ -78,9 +78,10 @@
 	module.exports = (function(){
 	  var Ship = __webpack_require__(2);
 	  var Obstacle = __webpack_require__(3);
-	  var Game = function(){
+	  var Game = function($el){
 	    var game = this;
 
+	    game.$el = $el;
 	    game.reset();
 	  };
 
@@ -108,7 +109,7 @@
 
 	    window.cancelAnimationFrame(game.animFrameID);
 
-	    document.getElementById("WebGLCanvas").innerHTML = '';
+	    game.$el.innerHTML = '';
 
 	    game.reset();
 	    game.init();
@@ -132,9 +133,10 @@
 
 	  Game.prototype.recalculateDimensions = function(){
 	    var game = this;
+	    var canvasRect = game.$el.getBoundingClientRect();
 
-	    game.canvasWidth = window.innerWidth;
-	    game.canvasHeight = window.innerHeight;
+	    game.canvasWidth = canvasRect.width;
+	    game.canvasHeight = canvasRect.height;
 	    game.aspectRatio = game.canvasWidth / game.canvasHeight;
 	    game.limitLeft = - (game.worldUnit * game.aspectRatio) / 2;
 	    game.limitRight = (game.worldUnit * game.aspectRatio) / 2;
@@ -158,13 +160,13 @@
 	  Game.prototype.bindDOM = function(){
 	    var game = this;
 
-	    window.addEventListener('resize', function(){
-	      window.cancelAnimationFrame(game.animFrameID);
-
-	      game.recalculateDimensions();
-	      game.recalculateCamera();
-	      game.renderScene();
-	    });
+	    // window.addEventListener('resize', function(){
+	    //   window.cancelAnimationFrame(game.animFrameID);
+	    //
+	    //   game.recalculateDimensions();
+	    //   game.recalculateCamera();
+	    //   game.renderScene();
+	    // });
 
 	    window.addEventListener('keydown', function(e){
 	      if (e.which === 37) {
@@ -207,7 +209,7 @@
 
 	    game.recalculateDimensions();
 
-	    document.getElementById("WebGLCanvas").appendChild(game.renderer.domElement);
+	    game.$el.appendChild(game.renderer.domElement);
 
 	    game.scene = new THREE.Scene();
 
@@ -459,7 +461,10 @@
 	      newRadian = Math.PI - deltaRadian;
 	      quadModifiers = { x: 1, y: -1 };
 	    }
-	    if (!deltaRadian || !newRadian) { debugger; }
+	    if (!deltaRadian || !newRadian) {
+	      console.error('Critical error!');
+	      debugger;
+	    }
 	    setNewOrbit(deltaRadian, newRadian, quadModifiers);
 	  };
 
