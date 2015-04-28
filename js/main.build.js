@@ -56,11 +56,11 @@
 	  var orbitroide = new Game(document.getElementById('WebGLCanvas'));
 	  // var gui = new dat.GUI();
 
-	  orbitroide
+	  orbitroid
 	    .init()
 	    .instructions();
 
-	  window.orbitroide = orbitroide;
+	  window.orbitroid = orbitroid;
 
 	  // gui.add(orbitroide, 'stepX', 0.01, 1);
 	  // gui.add(orbitroide.ship.options.orbit, 'radius', 1, 4);
