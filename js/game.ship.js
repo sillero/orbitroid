@@ -5,6 +5,10 @@ module.exports = (function(){
 
     ship.options = options;
 
+    ship.size = options.size;
+
+    var halfSize = ship.size / 2;
+
     options.orbit = options.orbit || {
       direction: 1,
       center: { x: 0, y: 0 },
@@ -22,13 +26,41 @@ module.exports = (function(){
 
     ship.geometry = new THREE.Geometry();
 
-    ship.geometry.vertices.push(new THREE.Vector3(0, 0.25));
-    ship.geometry.vertices.push(new THREE.Vector3(-0.15, -0.25));
-    ship.geometry.vertices.push(new THREE.Vector3(0.15, -0.25));
+    ship.geometry.vertices.push(new THREE.Vector3(0, halfSize));
+    ship.geometry.vertices.push(new THREE.Vector3(-halfSize, -halfSize));
+    ship.geometry.vertices.push(new THREE.Vector3(halfSize, -halfSize));
     ship.geometry.faces.push(new THREE.Face3(0, 1, 2));
 
     ship.mesh = new THREE.Mesh(ship.geometry, blackMaterial);
     ship.mesh.position.set(-options.orbit.radius, 0, 0);
+  };
+
+  Ship.prototype.didCollide = function(obstacle){
+    var ship = this;
+    var getBoundingVertices = function(entity){
+      var halfSize = entity.size / 2;
+      
+      return {
+        V1: {
+          x: entity.mesh.position.x - halfSize,
+          y: entity.mesh.position.y + halfSize
+        },
+        V3: { 
+          x: entity.mesh.position.x + halfSize,
+          y: entity.mesh.position.y - halfSize
+        }
+      };
+    };
+    var A = getBoundingVertices(ship);
+    var B = getBoundingVertices(obstacle);
+    
+    if (B.V1.y < A.V3.y) { return false; }
+
+    if (B.V3.y > A.V1.y) { return false; }
+
+    if (B.V1.x > A.V3.x) { return false; }
+
+    return (B.V3.x >= A.V1.x);
   };
 
   Ship.prototype.move = function(){
@@ -41,6 +73,7 @@ module.exports = (function(){
       ship.movement.orbit.bind(ship)();
     }
   };
+
   Ship.prototype.flipOrbit = function(intendedDirection){
     if (intendedDirection === this.options.orbit.direction) {
       return false;
@@ -57,8 +90,6 @@ module.exports = (function(){
       orbit.center.y = ship.mesh.position.y + (quadModifiers.y * orbit.radius * Math.sin(deltaRadian));
       orbit.direction *= -1;
       orbit.registeredRadian = newRadian;
-
-
     };
 
     if (quadrant == 1) {

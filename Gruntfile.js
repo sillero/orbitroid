@@ -27,7 +27,7 @@ module.exports = function(grunt) {
         }
       },
       main: {
-        files: ['./js/main.js', './js/game.js', './js/game.ship.js'],
+        files: ['./js/main.js', './js/game.js', './js/game.*.js'],
         tasks: ['webpack']
       }
     }
