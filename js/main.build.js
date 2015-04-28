@@ -158,10 +158,11 @@
 	  };
 
 	  Game.prototype.printObstacles = function(){
+	    var game = this;
 	    var str = [];
 
 	    game.obstacles.forEach(function(obstacle){
-	      str.push('game.obstacles.push(new Obstacle({ goal: ' + obstacle.isGoal + 'size: ' + obstacle.size + ', position: ['+obstacle.mesh.position.x+', '+obstacle.mesh.position.y+'] }));');
+	      str.push('game.obstacles.push(new Obstacle({ goal: ' + obstacle.isGoal + ', size: ' + obstacle.size + ', position: ['+obstacle.mesh.position.x+', '+obstacle.mesh.position.y+'] }));');
 	    });
 
 	    console.log(str.join('\n'));
