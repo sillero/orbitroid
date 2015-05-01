@@ -128,7 +128,12 @@
 	  };
 
 	  Game.prototype.instructions = function(){
-	    alert('Para se movimentar, utilize as setas direita e esquerda.\n\nREGRAS: não saia dos limites da tela, não bata em nenhum obstáculo, o objetivo está em verde.');
+	    var str = [
+	      'To move, use the left and right arrows.\n\nRULES: don\'t leave the screen edges, don\'t hit any obstacles, the objective is in green.',
+	      '----------------------------------------',
+	      'Para se movimentar, utilize as setas direita e esquerda.\n\nREGRAS: não saia dos limites da tela, não bata em nenhum obstáculo, o objetivo está em verde.'
+	    ]
+	    alert(str.join('\n\n'));
 	  };
 
 	  Game.prototype.recalculateDimensions = function(){
